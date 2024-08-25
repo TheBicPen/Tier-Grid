@@ -1,0 +1,52 @@
+body {
+    background-color: #353535;
+}
+
+* {
+    color: rgb(235, 229, 222);
+}
+
+table {
+    border: 3px solid #f0f0f0;
+}
+
+td>.table-cell {
+    min-width: 4em;
+    min-height: 4em;
+    border: 1px solid #f0f0f0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.label-content {
+    display: inline;
+    font-size: large;
+}
+
+.label-arrow {
+    display: inline;
+    font-size: x-large;
+}
+
+#x-axis-label {
+    text-align: right;
+}
+
+#grid-container {
+    width: fit-content;
+}
+
+#image-bank {
+    margin-top: 0.5em;
+    min-height: 5vmin;
+    border: 3px solid #f0f0f0;
+}
+
+img {
+    width: 4em;
+    height: 4em;
+}
+
+.gu-mirror {
+    display: none;
+}

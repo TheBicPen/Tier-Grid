@@ -1,0 +1,14 @@
+{
+  "name": "tier-grid",
+  "version": "0.0.1",
+  "description": "Grid for making 2-axis tier lists",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "dragula": "^3.7.3"
+  }
+}
