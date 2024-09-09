@@ -4,8 +4,8 @@ const BASE_COLOR = [53, 53, 53];
 const AXIS_X_COLOR = [100, 110, 10];
 const AXIS_Y_COLOR = [10, 60, 130];
 
-function rgb_to_css(r, g, b, a) {
-    return `rgb(${[r, g, b].join(' ')} / ${a})`;
+function rgb_to_css(components, a) {
+    return `rgb(${components.join(' ')} / ${a})`;
 }
 
 function int_lerp(start, end, count) {
@@ -31,7 +31,8 @@ function set_cell_opacity(table, opacity) {
         for (const cell of row.cells) {
             const current_background_color = cell.style.backgroundColor;
             const components = current_background_color.match(/[\d.]+/g);
-            cell.style.backgroundColor = rgb_to_css(components[0], components[1], components[2], opacity);
+            console.assert(components.length >= 3);
+            cell.style.backgroundColor = rgb_to_css(components.slice(0, 3), opacity);
         }
     }
 }
@@ -54,7 +55,7 @@ function set_table_cell_color(table) {
     for (const [i, row] of Array.from(table.rows).entries()) {
         for (const [j, cell] of Array.from(row.cells).entries()) {
             const cell_color_rgb = combine_colors(colors_x_rgb[j], colors_y_rgb[y - i - 1]);
-            cell.style.backgroundColor = rgb_to_css(...cell_color_rgb, 1);
+            cell.style.backgroundColor = rgb_to_css(cell_color_rgb, 1);
         }
     }
 }
