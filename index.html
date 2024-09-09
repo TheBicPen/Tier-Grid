@@ -35,6 +35,10 @@
     <div id="image-bank" ondrop="add_to_drag_zone(event);" ondragover="drag_zone_prevent_default_drag(event);">
         <div id="image-bank-label">Drag some images here</div>
     </div>
+    <div>
+        <input type="checkbox" id="toggle-color" checked onclick="set_cell_opacity(tier_grid, Number(this.checked));"/>
+        Color Grid
+    </div>
 
     <!-- Use the local version for development -->
     <!-- <script src="./node_modules/dragula/dist/dragula.js"></script> -->
