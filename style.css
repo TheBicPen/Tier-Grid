@@ -1,5 +1,10 @@
+:root {
+    --base-color: #353535;
+    --text-color: #f0f0f0;
+}
+
 body {
-    background-color: #353535;
+    background-color: var(--base-color);
 }
 
 * {
@@ -7,13 +12,13 @@ body {
 }
 
 table {
-    border: 3px solid #f0f0f0;
+    border: 3px solid var(--text-color);
 }
 
 td>.table-cell {
     min-width: 4em;
     min-height: 4em;
-    border: 1px solid #f0f0f0;
+    border: 1px solid var(--text-color);
     display: flex;
     flex-wrap: wrap;
 }
@@ -39,7 +44,7 @@ td>.table-cell {
 #image-bank {
     margin-top: 0.5em;
     min-height: 5vmin;
-    border: 3px solid #f0f0f0;
+    border: 3px solid var(--text-color);
 }
 
 img {
