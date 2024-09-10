@@ -1,6 +1,8 @@
 :root {
-    --base-color: #353535;
+    --base-color: oklch(32.9% 0 0 / 1);
     --text-color: #f0f0f0;
+    /* The template to be filled with values in JS. Included for documentation only */
+    --base-with-template: oklch(from var(--base-color) calc(l + 0) calc(c + 0) calc(h + 0) / 1)
 }
 
 body {

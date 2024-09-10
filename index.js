@@ -1,38 +1,28 @@
 "use strict"
 
-const BASE_COLOR = [53, 53, 53];
-const AXIS_X_COLOR = [100, 110, 10];
-const AXIS_Y_COLOR = [10, 60, 130];
+const AXIS_X_COLOR_ADDITION_OKLCH = [0, 0.1, 330];
+const AXIS_Y_COLOR_ADDITION_OKLCH = [0, 0.1, 170];
+const HUE_MIDPOINT = (AXIS_X_COLOR_ADDITION_OKLCH[2] + AXIS_Y_COLOR_ADDITION_OKLCH[2]) / 2;
 
-function rgb_to_css(components, a) {
-    return `rgb(${components.join(' ')} / ${a})`;
+function add_oklch_color(color_var_name, components, a) {
+    return `oklch(from var(--${color_var_name}) calc(l + ${components[0]}) calc(c + ${components[1]}) calc(h + ${components[2]}) / ${a})`;
 }
 
-function int_lerp(start, end, count) {
-    const diff = end - start;
-    const inc = diff / count;
-    return range(count).map(
-        (_, index) => Math.round(start + inc * index)
-    );
-}
-
-function range(end) {
-    return Array.from(Array(end).keys());
-}
-
-function combine_colors(a, b) {
-    // Really should use a better color space than RGB. Apparently JS supports OKLAB now?
-    // With colors that overlap, this produces more vivid colors than arithmetic mean
-    return range(3).map((_, index) => Math.round(Math.sqrt(a[index] * b[index])));
+function combine_colors(x, y) {
+    // We don't want the lightness to be more than the sum of its parts
+    // Raising chroma to a higher power creates a nicer gradient
+    // Take the average hue
+    return [Math.max(x[0], y[0]), Math.pow(Math.max(x[1], y[1]), 3) * 200, x[2] - y[2] + HUE_MIDPOINT];
 }
 
 function set_cell_opacity(table, opacity) {
     for (const row of table.rows) {
         for (const cell of row.cells) {
             const current_background_color = cell.style.backgroundColor;
-            const components = current_background_color.match(/[\d.]+/g);
-            console.assert(components.length >= 3);
-            cell.style.backgroundColor = rgb_to_css(components.slice(0, 3), opacity);
+            const components = Array.from(current_background_color.matchAll(/[\d.]+/g));
+            console.assert(components.length == 4);
+            const opacity_match = components[3];
+            cell.style.backgroundColor = current_background_color.slice(0, opacity_match.index) + opacity + current_background_color.slice(opacity_match.index + opacity_match.length);
         }
     }
 }
@@ -40,22 +30,25 @@ function set_cell_opacity(table, opacity) {
 function set_table_cell_color(table) {
     const y = table.rows.length;
     const x = table.rows[y - 1].cells.length;
-    const colors_x_r = int_lerp(BASE_COLOR[0], AXIS_X_COLOR[0], x);
-    const colors_x_g = int_lerp(BASE_COLOR[1], AXIS_X_COLOR[1], x);
-    const colors_x_b = int_lerp(BASE_COLOR[2], AXIS_X_COLOR[2], x);
-    const colors_y_r = int_lerp(BASE_COLOR[0], AXIS_Y_COLOR[0], y);
-    const colors_y_g = int_lerp(BASE_COLOR[1], AXIS_Y_COLOR[1], y);
-    const colors_y_b = int_lerp(BASE_COLOR[2], AXIS_Y_COLOR[2], y);
-    const colors_x_rgb = range(x).map(
-        (_, index) => [colors_x_r[index], colors_x_g[index], colors_x_b[index]]
-    );
-    const colors_y_rgb = range(y).map(
-        (_, index) => [colors_y_r[index], colors_y_g[index], colors_y_b[index]]
-    );
     for (const [i, row] of Array.from(table.rows).entries()) {
         for (const [j, cell] of Array.from(row.cells).entries()) {
-            const cell_color_rgb = combine_colors(colors_x_rgb[j], colors_y_rgb[y - i - 1]);
-            cell.style.backgroundColor = rgb_to_css(cell_color_rgb, 1);
+            const colors_x_lch = [
+                AXIS_X_COLOR_ADDITION_OKLCH[0] * j / x,
+                AXIS_X_COLOR_ADDITION_OKLCH[1] * j / x,
+                // lerp from H_X to HUE_MIDPT, offset by -HUE_MIDPT
+                (HUE_MIDPOINT - AXIS_X_COLOR_ADDITION_OKLCH[2]) * j / x,
+            ];
+            const colors_y_lch = [
+                AXIS_Y_COLOR_ADDITION_OKLCH[0] * (y - i - 1) / y,
+                AXIS_Y_COLOR_ADDITION_OKLCH[1] * (y - i - 1) / y,
+                // lerp from HUE_MIDPT to Y_H, offset by -HUE_MIDPT
+                (AXIS_Y_COLOR_ADDITION_OKLCH[2] - HUE_MIDPOINT) * (y - i - 1) / y,
+            ];
+            const cell_color = combine_colors(colors_x_lch, colors_y_lch);
+            const new_color = add_oklch_color("base-color", cell_color, 1);
+            cell.style.backgroundColor = new_color;
+            // for debugging
+            // cell.innerText = String(cell_color[2]).slice(0, 4);
         }
     }
 }
