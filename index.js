@@ -8,11 +8,18 @@ function add_oklch_color(color_var_name, components, a) {
     return `oklch(from var(--${color_var_name}) calc(l + ${components[0]}) calc(c + ${components[1]}) calc(h + ${components[2]}) / ${a})`;
 }
 
-function combine_colors(x, y) {
-    // We don't want the lightness to be more than the sum of its parts
-    // Raising chroma to a higher power creates a nicer gradient
-    // Take the average hue
-    return [Math.max(x[0], y[0]), Math.pow(Math.max(x[1], y[1]), 3) * 200, x[2] - y[2] + HUE_MIDPOINT];
+function color_combiner(hue_midpt) {
+    return function combine_colors(x, y) {
+        // We don't want the lightness to be more than the sum of its parts
+        // Raising chroma to a higher power creates a nicer gradient
+        // Take the average hue
+
+        return [
+            Math.max(x[0], y[0]),       // L
+            Math.max(x[1], y[1]),       // C
+            x[2] - y[2] + hue_midpt     // H
+        ];
+    }
 }
 
 function set_cell_opacity(table, opacity) {
@@ -30,6 +37,7 @@ function set_cell_opacity(table, opacity) {
 function set_table_cell_color(table) {
     const y = table.rows.length;
     const x = table.rows[y - 1].cells.length;
+    const combine_colors = color_combiner(HUE_MIDPOINT);
     for (const [i, row] of Array.from(table.rows).entries()) {
         for (const [j, cell] of Array.from(row.cells).entries()) {
             const colors_x_lch = [
@@ -98,7 +106,7 @@ function drag_zone_prevent_default_drag(ev) {
 const tier_grid = document.getElementById("tier-grid");
 const image_bank = document.getElementById("image-bank");
 const image_bank_label = document.getElementById("image-bank-label");
-fill_table(tier_grid, 10, 10);
+fill_table(tier_grid, 7, 7);
 set_table_cell_color(tier_grid);
 const containers = Array.from(tier_grid.rows).flatMap(
     row => Array.from(row.cells).map(table_cell => table_cell.children[0])).concat([image_bank]);
