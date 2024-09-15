@@ -164,6 +164,13 @@ class TierGrid {
     }
 }
 
+function toggle_edit_controls() {
+    Array.from(document.getElementsByClassName("edit-control"))
+        .forEach(el => {
+            el.classList.toggle("hidden");
+        });
+}
+
 
 const AXIS_X_COLOR_OKLCH = [0, 0.1, 330];
 const AXIS_Y_COLOR_OKLCH = [0, 0.1, 170];
@@ -174,3 +181,4 @@ const TIER_GRID = new TierGrid(
     document.getElementById("image-bank"),
     document.getElementById("image-bank-label")
 );
+toggle_edit_controls();     // hide edit controls by default

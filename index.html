@@ -12,6 +12,8 @@
 <body>
     <h1 contenteditable="true">Tier Grid</h1>
 
+    <button onclick="toggle_edit_controls()">Edit</button>
+
     <div id="grid-container">
         <div id="y-axis-label" class="label" contenteditable="true">
             <div class="label-arrow">
@@ -20,8 +22,8 @@
             <div class="label-content">
                 Y axis (click me to edit)
             </div>
-            <button id="add-row" onclick="TIER_GRID.add_row()">Add row</button>
-            <button id="remove-row" onclick="TIER_GRID.remove_row()">Remove row</button>
+            <button id="add-row" class="edit-control" onclick="TIER_GRID.add_row()">Add row</button>
+            <button id="remove-row" class="edit-control" onclick="TIER_GRID.remove_row()">Remove row</button>
         </div>
         <table id="tier-grid">
         </table>
@@ -32,16 +34,17 @@
             <div class="label-content">
                 X axis (click me to edit)
             </div>
-            <button id="add-col" onclick="TIER_GRID.add_col()">Add column</button>
-            <button id="remove-col" onclick="TIER_GRID.remove_col()">Remove column</button>
+            <button id="add-col" class="edit-control" onclick="TIER_GRID.add_col()">Add column</button>
+            <button id="remove-col" class="edit-control" onclick="TIER_GRID.remove_col()">Remove column</button>
         </div>
     </div>
-    <div id="image-bank" ondrop="TIER_GRID.add_to_drag_zone(event)" ondragover="TierGrid.drag_zone_prevent_default_drag(event)">
-        <div id="image-bank-label">Drag some images here</div>
-    </div>
-    <div>
-        <input type="checkbox" id="toggle-color" checked onclick="TIER_GRID.set_cell_opacity(Number(this.checked))"/>
+    <div class="edit-control">
+        <input type="checkbox" id="toggle-color" checked onclick="TIER_GRID.set_cell_opacity(Number(this.checked))" />
         Color Grid
+    </div>
+    <div id="image-bank" ondrop="TIER_GRID.add_to_drag_zone(event)"
+        ondragover="TierGrid.drag_zone_prevent_default_drag(event)">
+        <div id="image-bank-label">Drag some images here</div>
     </div>
 
     <!-- Use the local version for development -->

@@ -17,6 +17,11 @@ button {
     color: initial;
 }
 
+/* Hideable elements can gain this class to avoid overriding their existing display attribute */
+.hidden {
+    display: none;
+}
+
 table {
     border: 3px solid var(--text-color);
 }
