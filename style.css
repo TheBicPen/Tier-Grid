@@ -13,6 +13,10 @@ body {
     color: rgb(235, 229, 222);
 }
 
+button {
+    color: initial;
+}
+
 table {
     border: 3px solid var(--text-color);
 }

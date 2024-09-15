@@ -20,6 +20,7 @@
             <div class="label-content">
                 Y axis (click me to edit)
             </div>
+            <button id="add-row" onclick="TIER_GRID.add_row()">Add row</button>
         </div>
         <table id="tier-grid">
         </table>
@@ -30,13 +31,14 @@
             <div class="label-content">
                 X axis (click me to edit)
             </div>
+            <button id="add-col" onclick="TIER_GRID.add_col()">Add column</button>
         </div>
     </div>
-    <div id="image-bank" ondrop="add_to_drag_zone(event);" ondragover="drag_zone_prevent_default_drag(event);">
+    <div id="image-bank" ondrop="TIER_GRID.add_to_drag_zone(event)" ondragover="TierGrid.drag_zone_prevent_default_drag(event)">
         <div id="image-bank-label">Drag some images here</div>
     </div>
     <div>
-        <input type="checkbox" id="toggle-color" checked onclick="set_cell_opacity(tier_grid, Number(this.checked));"/>
+        <input type="checkbox" id="toggle-color" checked onclick="TIER_GRID.set_cell_opacity(Number(this.checked))"/>
         Color Grid
     </div>
 
