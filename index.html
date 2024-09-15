@@ -21,6 +21,7 @@
                 Y axis (click me to edit)
             </div>
             <button id="add-row" onclick="TIER_GRID.add_row()">Add row</button>
+            <button id="remove-row" onclick="TIER_GRID.remove_row()">Remove row</button>
         </div>
         <table id="tier-grid">
         </table>
@@ -32,6 +33,7 @@
                 X axis (click me to edit)
             </div>
             <button id="add-col" onclick="TIER_GRID.add_col()">Add column</button>
+            <button id="remove-col" onclick="TIER_GRID.remove_col()">Remove column</button>
         </div>
     </div>
     <div id="image-bank" ondrop="TIER_GRID.add_to_drag_zone(event)" ondragover="TierGrid.drag_zone_prevent_default_drag(event)">

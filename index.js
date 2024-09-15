@@ -115,6 +115,27 @@ class TierGrid {
         this.#update_tier_grid();
     }
 
+    remove_row() {
+        // Need at least 1 row for width to make sense
+        if (this.#tier_grid.rows.length === 1)
+            return;
+        const row = this.#tier_grid.rows[this.#tier_grid.rows.length - 1];
+        this.#tier_grid.removeChild(row);
+        this.#update_tier_grid();
+    }
+
+    remove_col() {
+        const num_cols = this.#tier_grid.rows[0].cells.length;
+        // Need at least 1 column for height to make sense
+        if (num_cols === 1)
+            return;
+        for (const row of Array.from(this.#tier_grid.rows)) {
+            const cell = row.cells[num_cols - 1];
+            row.removeChild(cell);
+        }
+        this.#update_tier_grid();
+    }
+
     add_to_drag_zone(ev) {
         // Prevent default behavior (Prevent file from being opened)
         ev.preventDefault();
